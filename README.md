@@ -6,7 +6,8 @@ refusal explains why, and every action is recorded in a history log.
 
 ## Try it (2-minute demo)
 
-Start both apps, open http://localhost:5173 and use "Acting as" at the top right.
+Start both apps and open http://localhost:5173. Pick a person on the welcome screen (or switch any
+time with "Acting as" at the top right).
 
 1. **Asha (S1)** → My shifts → **Post** SH004 (Mon 2 Mar, 15:00–23:00, needs ICU).
 2. **Ben (S2)** → Open listings: SH004 shows why he can't claim it: Rule 2 (no ICU) and Rule 4
