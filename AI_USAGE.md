@@ -2,8 +2,33 @@
 
 Tool: Claude (chat assistant with access to this project folder).
 
-I used AI to speed up writing code I had designed and reviewed. I read, ran and tested every
-change before committing it.
+I directed this project and made the product, design and process decisions; Claude drafted most of
+the code under that direction. Nothing was written without my go-ahead on the next step, and I ran,
+tested, committed and deployed every change myself, so I can explain every file.
+
+## Decisions I made
+
+- **Problem choice:** weighed both problem statements and chose ShiftSwap because its core is rule
+  validation, concurrency and an audit trail, which is close to spend-audit work.
+- **Raised the bar on the design:** rejected the first, simpler design as not professional enough and
+  asked for production patterns. That is why the project has a rules engine, a state machine,
+  optimistic concurrency, an approval transaction and an append-only audit log.
+- **Way of working:** fixed the phases (analyze, design, MVP, deploy, polish, test, submit), started
+  from a fresh repo instead of the prepared starter, one branch per feature with `--no-ff` merges,
+  and docs updated in the same commits as the code.
+- **Frontend approach:** questioned plain tabs and moved to React Router so each page has its own URL;
+  kept the UI to plain CSS with no component library so every piece stays explainable.
+- **Found bugs by testing the app myself:** switching from staff to manager left the manager on an
+  empty staff page (now redirects to the role's home page), and the logo did not return to the
+  person picker (now it does).
+- **Reviewed scalability:** questioned whether the person cards scale; kept them because there is no
+  login in the spec and the roster has 10 people, while a real product would use login instead.
+- **Deployment:** set up Render and Vercel myself, and configured CORS for both the local and the
+  deployed frontend.
+- **Final check:** had the finished app checked line by line against the problem statement before
+  submitting.
+
+## Where AI was used
 
 | Area | What AI did | What I accepted, changed or rejected |
 | ---- | ----------- | ------------------------------------ |
