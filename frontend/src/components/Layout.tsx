@@ -6,13 +6,14 @@ import { WelcomeScreen } from './WelcomeScreen'
 // Header + navigation around every page. Staff and managers see different
 // links, because they do different jobs.
 export function Layout() {
-  const { actor, loading, error } = useActor()
+  const { actor, loading, error, setActorId } = useActor()
 
   return (
     <div className="app">
       <header className="header">
         <div className="header-inner">
-          <Link to="/" className="brand">
+          {/* The logo signs you out of the current person and shows the person picker again. */}
+          <Link to="/" className="brand" onClick={() => setActorId(null)}>
             <span className="logo" aria-hidden="true">
               ⇄
             </span>
