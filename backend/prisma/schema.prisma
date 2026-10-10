@@ -10,3 +10,61 @@ datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
 }
+
+model Staff {
+  id             String @id
+  name           String
+  role           String // "STAFF" | "MANAGER"
+  certifications String @default("[]") // JSON array of strings (SQLite has no array type)
+
+  shifts          Shift[]        @relation("ShiftAssignee")
+  postedListings  Listing[]      @relation("ListingPoster")
+  claimedListings Listing[]      @relation("ListingClaimer")
+  history         HistoryEntry[]
+}
+
+model Shift {
+  id                    String  @id
+  start                 String // "YYYY-MM-DDTHH:MM", local clinic time
+  end                   String
+  requiredCertification String?
+  assignedToId          String
+
+  assignedTo Staff     @relation("ShiftAssignee", fields: [assignedToId], references: [id])
+  listings   Listing[]
+
+  @@index([assignedToId])
+}
+
+model Listing {
+  id        Int      @id @default(autoincrement())
+  shiftId   String
+  posterId  String
+  claimerId String?
+  status    String // "OPEN" | "CLAIMED" | "WITHDRAWN" | "APPROVED"
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  shift   Shift  @relation(fields: [shiftId], references: [id])
+  poster  Staff  @relation("ListingPoster", fields: [posterId], references: [id])
+  claimer Staff? @relation("ListingClaimer", fields: [claimerId], references: [id])
+
+  @@index([status])
+  @@index([shiftId])
+}
+
+// Append-only audit trail: every action, including refused ones.
+model HistoryEntry {
+  id        Int      @id @default(autoincrement())
+  actorId   String
+  action    String // POST | WITHDRAW | CLAIM | UNCLAIM | APPROVE | REJECT
+  shiftId   String
+  listingId Int?
+  outcome   String // "SUCCESS" | "REFUSED"
+  reasons   String   @default("[]") // JSON array of refusal reasons
+  createdAt DateTime @default(now())
+
+  actor Staff @relation(fields: [actorId], references: [id])
+
+  @@index([createdAt])
+}
