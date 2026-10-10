@@ -1,6 +1,7 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router'
 import { useActor } from './actor/ActorContext'
 import { ActorProvider } from './actor/ActorProvider'
+import { homeFor } from './actor/roles'
 import { Layout } from './components/Layout'
 import { RequireRole } from './components/RequireRole'
 import { ApprovalsPage } from './pages/ApprovalsPage'
@@ -11,7 +12,7 @@ import { OpenListingsPage } from './pages/OpenListingsPage'
 // "/" sends staff to their shifts and managers to the approvals queue.
 function Home() {
   const { actor } = useActor()
-  return <Navigate to={actor?.role === 'MANAGER' ? '/approvals' : '/shifts'} replace />
+  return <Navigate to={actor ? homeFor(actor.role) : '/shifts'} replace />
 }
 
 function App() {
