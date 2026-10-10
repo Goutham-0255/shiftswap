@@ -2,6 +2,7 @@ import { api } from '../api/client'
 import { ActionFeedback } from '../components/ActionFeedback'
 import { CertTag } from '../components/CertTag'
 import { PageHeader } from '../components/PageHeader'
+import { ReasonList } from '../components/ReasonList'
 import { ShiftWhen } from '../components/ShiftWhen'
 import { useAction } from '../hooks/useAction'
 import { useApi } from '../hooks/useApi'
@@ -35,6 +36,7 @@ export function ApprovalsPage() {
                 <th>When</th>
                 <th>Needs</th>
                 <th>Swap</th>
+                <th>Rules check</th>
                 <th />
               </tr>
             </thead>
@@ -51,10 +53,18 @@ export function ApprovalsPage() {
                   <td>
                     {listing.poster.name} <span className="muted">→</span> <strong>{listing.claimer?.name}</strong>
                   </td>
+                  <td>
+                    {listing.canApprove ? (
+                      <span className="check-ok">✓ Rules still pass</span>
+                    ) : (
+                      <ReasonList reasons={listing.reasons} />
+                    )}
+                  </td>
                   <td className="actions">
                     <button
                       className="button"
-                      disabled={action.busy}
+                      disabled={action.busy || !listing.canApprove}
+                      title={listing.canApprove ? undefined : 'Approval would break the rules shown'}
                       onClick={() =>
                         action.run(
                           () => api.listingAction(listing.id, 'approve'),

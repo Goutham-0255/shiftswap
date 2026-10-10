@@ -13,8 +13,14 @@ function toUtcMs(value: string) {
   return Date.UTC(year, month - 1, day, hour, minute)
 }
 
+const DAY_MS = 86_400_000
+
 function formatDay(value: string) {
-  const date = new Date(toUtcMs(value))
+  return dayLabel(toUtcMs(value))
+}
+
+function dayLabel(ms: number) {
+  const date = new Date(ms)
   return `${DAYS[date.getUTCDay()]} ${date.getUTCDate()} ${MONTHS[date.getUTCMonth()]}`
 }
 
@@ -35,6 +41,14 @@ export function shiftParts(shift: Pick<Shift, 'start' | 'end'>) {
     ? `${timeOf(shift.start)}–${timeOf(shift.end)}`
     : `${timeOf(shift.start)} – ${timeOf(shift.end)} (next day)`
   return { day: formatDay(shift.start), time }
+}
+
+// The Monday 00:00 that starts the week a shift belongs to (the week it starts in).
+export function weekOf(value: string) {
+  const ms = toUtcMs(value)
+  const daysSinceMonday = (new Date(ms).getUTCDay() + 6) % 7
+  const monday = Math.floor(ms / DAY_MS) * DAY_MS - daysSinceMonday * DAY_MS
+  return { key: monday, label: `Week of ${dayLabel(monday)}` }
 }
 
 export function shiftHours(shift: Pick<Shift, 'start' | 'end'>) {

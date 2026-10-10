@@ -100,6 +100,11 @@ describe('listing workflow', () => {
     // Meanwhile Uma is given an overlapping shift (e.g. by another approved swap).
     await prisma.shift.update({ where: { id: 'SH002' }, data: { assignedToId: 'S7' } });
 
+    // The manager's list already warns that approval would fail, and why.
+    const claimed = (await request(app).get('/api/listings?status=CLAIMED').set(as('M1'))).body.data;
+    expect(claimed[0]).toMatchObject({ canApprove: false });
+    expect(claimed[0].reasons[0]).toMatchObject({ rule: 3, conflictingShiftId: 'SH002' });
+
     const res = await act('M1', id, 'approve');
     expect(res.status).toBe(422);
     expect(res.body.error.details[0]).toMatchObject({ rule: 3, conflictingShiftId: 'SH002' });

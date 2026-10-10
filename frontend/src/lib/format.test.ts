@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { formatShiftTime, shiftHours, shiftParts } from './format'
+import { formatShiftTime, shiftHours, shiftParts, weekOf } from './format'
 
 describe('formatShiftTime', () => {
   it('shows a day shift on one line', () => {
@@ -41,5 +41,15 @@ describe('shiftParts', () => {
       day: 'Sun 8 Mar',
       time: '23:00 – 07:00 (next day)',
     })
+  })
+})
+
+describe('weekOf', () => {
+  it('puts a Sunday night shift in the week that started on Monday', () => {
+    expect(weekOf('2026-03-08T23:00')).toMatchObject({ label: 'Week of Mon 2 Mar' })
+  })
+
+  it('starts a new week on Monday 00:00', () => {
+    expect(weekOf('2026-03-09T00:00').label).toBe('Week of Mon 9 Mar')
   })
 })

@@ -1,4 +1,5 @@
 import type {
+  ClaimedListing,
   HistoryEntry,
   Listing,
   ListingAction,
@@ -76,7 +77,7 @@ export const api = {
     request<Staff>('/api/staff', 'POST', { name, certifications }),
   myShifts: () => request<MyShift[]>('/api/shifts/mine'),
   openListings: () => request<OpenListing[]>('/api/listings?status=OPEN'),
-  claimedListings: () => request<Listing[]>('/api/listings?status=CLAIMED'),
+  claimedListings: () => request<ClaimedListing[]>('/api/listings?status=CLAIMED'),
   history: () => request<HistoryEntry[]>('/api/history'),
   postShift: (shiftId: string) => request<Listing>('/api/listings', 'POST', { shiftId }),
   listingAction: (id: number, action: ListingAction) =>
