@@ -4,6 +4,18 @@ Shift-swap system for CityCare Clinic: staff post shifts they cannot work, colle
 managers approve or reject. Every action is validated against the clinic's labour rules, every
 refusal explains why, and every action is recorded in a history log.
 
+## Try it (2-minute demo)
+
+Start both apps, open http://localhost:5173 and use "Acting as" at the top right.
+
+1. **Asha (S1)** → My shifts → **Post** SH004 (Mon 2 Mar, 15:00–23:00, needs ICU).
+2. **Ben (S2)** → Open listings: SH004 shows why he can't claim it: Rule 2 (no ICU) and Rule 4
+   (not enough rest next to his other shifts).
+3. **Tarun (S6)** → Open listings → **Claim** SH004. It moves to "My claims, waiting for a manager".
+4. **Meera (M1)** → Approvals → **Approve**. SH004 now belongs to Tarun (see his My shifts).
+5. **History**: every step above with who did it and when. Refused actions (for example a claim on a
+   listing someone else just took) are shown in red with their reasons.
+
 ## Engineering highlights
 
 - **Rules engine (strategy pattern):** each labour rule is its own module with the same
@@ -30,6 +42,8 @@ refusal explains why, and every action is recorded in a history log.
   into a readable message, and one `useApi` hook gives each page loading, error and reload.
 - **Stale-data recovery:** if an action gets `409` (someone else acted first), the page shows why and
   reloads its data automatically, so the user never acts on an outdated list.
+
+See [ARCHITECTURE.md](ARCHITECTURE.md) for the layers, the listing state machine and key decisions.
 
 ## Tech stack
 
