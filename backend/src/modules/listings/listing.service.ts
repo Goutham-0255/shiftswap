@@ -157,5 +157,17 @@ export const listingService = {
       });
   },
 
-  claimedListings: () => repo.listByStatus('CLAIMED'),
+  // CLAIMED listings, each with "would approval pass right now, and if not why",
+  // using the same rules 2 to 5 that approve() re-checks.
+  async claimedListings() {
+    const listings = await repo.listByStatus('CLAIMED');
+    return Promise.all(
+      listings.map(async (listing) => {
+        const claimer = listing.claimer!;
+        const context = await buildClaimContext(claimer.id, JSON.parse(claimer.certifications), listing);
+        const reasons = evaluateLabourRules(context);
+        return { ...listing, canApprove: reasons.length === 0, reasons };
+      }),
+    );
+  },
 };

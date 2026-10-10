@@ -1,9 +1,11 @@
+import { Link } from 'react-router'
 import { api } from '../api/client'
 import { ActionFeedback } from '../components/ActionFeedback'
 import { CertTag } from '../components/CertTag'
 import { PageHeader } from '../components/PageHeader'
 import { ShiftWhen } from '../components/ShiftWhen'
 import { StatusBadge } from '../components/StatusBadge'
+import { WeekSummary } from '../components/WeekSummary'
 import { useAction } from '../hooks/useAction'
 import { useApi } from '../hooks/useApi'
 
@@ -25,9 +27,12 @@ export function MyShiftsPage() {
         subtitle="Post a shift you cannot work so a colleague can claim it."
       />
       <ActionFeedback notice={action.notice} error={action.error} onDismiss={action.clear} />
+      <WeekSummary shifts={shifts ?? []} />
 
       {shifts && shifts.length === 0 ? (
-        <p className="empty">You have no shifts.</p>
+        <p className="empty">
+          No shifts yet. <Link to="/listings">Browse open listings →</Link>
+        </p>
       ) : (
         <div className="card">
           <table className="table">

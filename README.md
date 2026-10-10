@@ -41,6 +41,9 @@ time with "Acting as" at the top right).
   reasons.
 - **Server decides, UI displays:** the frontend never re-implements the labour rules; it shows the
   `canClaim` flag and reasons the backend computed, so there is one source of truth.
+- **Rules visible before they bite:** staff see a weekly-hours bar against the 40h limit, and managers
+  see "✓ Rules still pass" or the exact reasons on every claim before approving; both come from the
+  same rules engine the server uses to enforce them.
 - **Single API client:** one `api` module adds the `X-Actor-Id` header and turns every error response
   into a readable message, and one `useApi` hook gives each page loading, error and reload.
 - **Stale-data recovery:** if an action gets `409` (someone else acted first), the page shows why and

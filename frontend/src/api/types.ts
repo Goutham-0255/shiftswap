@@ -51,6 +51,12 @@ export interface OpenListing extends Listing {
   reasons: Violation[]
 }
 
+// A CLAIMED listing as seen by a manager: would approval pass right now, and if not why.
+export interface ClaimedListing extends Listing {
+  canApprove: boolean
+  reasons: Violation[]
+}
+
 export interface MyShift extends Shift {
   activeListing: {
     id: number
