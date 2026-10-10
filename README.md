@@ -28,6 +28,8 @@ refusal explains why, and every action is recorded in a history log.
   `canClaim` flag and reasons the backend computed, so there is one source of truth.
 - **Single API client:** one `api` module adds the `X-Actor-Id` header and turns every error response
   into a readable message, and one `useApi` hook gives each page loading, error and reload.
+- **Stale-data recovery:** if an action gets `409` (someone else acted first), the page shows why and
+  reloads its data automatically, so the user never acts on an outdated list.
 
 ## Tech stack
 
