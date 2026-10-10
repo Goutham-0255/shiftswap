@@ -17,3 +17,4 @@ change before committing it.
 | Staff pages | Drafted My shifts and Open listings pages, `useAction` hook and shift-time formatting | Kept time formatting on UTC maths so the browser's time zone cannot shift shift times; reasons come from the server, not re-checked in the UI |
 | Manager and history pages | Drafted the Approvals and History pages and a `RequireRole` wrapper | Kept role checks on the server (403) as the real guard; the wrapper only hides buttons that would always fail |
 | Docs and polish | Drafted ARCHITECTURE.md and the README demo walkthrough | Ran each demo step on a fresh database first and corrected the expected outcomes to match what the app really shows |
+| Frontend tests and filter | Drafted `format.test.ts` and the "Only refused" filter on History | Added the month-end night-shift case after reviewing which dates could break |

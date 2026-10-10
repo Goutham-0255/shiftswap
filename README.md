@@ -31,6 +31,8 @@ Start both apps, open http://localhost:5173 and use "Acting as" at the top right
   lives in one table; any other move is refused in one place.
 - **Optimistic concurrency:** claims and approvals update a listing only if it is still in the status
   that was read (`WHERE status = 'OPEN'`), so two people clicking at the same moment cannot both win.
+- **Tests on both sides:** besides the backend suites, the frontend's time formatting is unit-tested
+  (night shifts across midnight and month ends), since a wrong date on screen is a real bug.
 - **Workflow tests:** API tests cover the full post → claim → approve flow, every refusal type, the
   approval re-check and two simultaneous claims (exactly one wins), against a separate test database.
 - **Atomic approval:** reassigning the shift and approving the listing run in one database transaction.
@@ -72,6 +74,7 @@ cd frontend
 cp .env.example .env # VITE_API_URL points at the backend
 npm install
 npm run dev
+npm test             # time-formatting unit tests
 ```
 
 ## Deployment
