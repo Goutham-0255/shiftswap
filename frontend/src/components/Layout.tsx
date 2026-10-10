@@ -27,7 +27,10 @@ export function Layout() {
                   <NavLink to="/listings">Open listings</NavLink>
                 </>
               ) : (
-                <NavLink to="/approvals">Approvals</NavLink>
+                <>
+                  <NavLink to="/approvals">Approvals</NavLink>
+                  <NavLink to="/team">Team</NavLink>
+                </>
               )}
               <NavLink to="/history">History</NavLink>
             </nav>

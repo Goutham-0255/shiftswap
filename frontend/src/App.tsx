@@ -6,6 +6,7 @@ import { Layout } from './components/Layout'
 import { RequireRole } from './components/RequireRole'
 import { ApprovalsPage } from './pages/ApprovalsPage'
 import { HistoryPage } from './pages/HistoryPage'
+import { TeamPage } from './pages/TeamPage'
 import { MyShiftsPage } from './pages/MyShiftsPage'
 import { OpenListingsPage } from './pages/OpenListingsPage'
 
@@ -43,6 +44,14 @@ function App() {
               element={
                 <RequireRole role="MANAGER">
                   <ApprovalsPage />
+                </RequireRole>
+              }
+            />
+            <Route
+              path="team"
+              element={
+                <RequireRole role="MANAGER">
+                  <TeamPage />
                 </RequireRole>
               }
             />

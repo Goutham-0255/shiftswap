@@ -9,6 +9,7 @@ export interface ActorContextValue {
   setActorId: (id: string | null) => void
   loading: boolean
   error: string | null
+  reloadStaff: () => void
 }
 
 export const ActorContext = createContext<ActorContextValue | null>(null)
