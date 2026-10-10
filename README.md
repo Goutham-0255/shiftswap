@@ -60,6 +60,18 @@ npm install
 npm run dev
 ```
 
+## Deployment
+
+- **Backend on Render** (Web Service): root directory `backend`, build command
+  `npm ci --include=dev && npm run build`, start command `npm run start:prod` (applies migrations,
+  then starts). Environment: `NODE_ENV=production`, `DATABASE_URL=file:./prod.db`,
+  `CORS_ORIGIN=<the Vercel URL>`.
+- **Frontend on Vercel**: root directory `frontend` (Vite preset), environment
+  `VITE_API_URL=<the Render URL>`. `vercel.json` sends every path to `index.html` so page URLs
+  survive a refresh.
+- **Note:** Render's free plan has no persistent disk, so the hosted SQLite file resets when the
+  service restarts and the seed loads again. Run locally to see data survive restarts.
+
 ## API
 
 Every request except `GET /api/staff` and `GET /api/history` sends the chosen person in an
