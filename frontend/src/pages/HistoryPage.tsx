@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { api } from '../api/client'
 import { ReasonList } from '../components/ReasonList'
 import { useApi } from '../hooks/useApi'
@@ -16,9 +17,12 @@ const ACTION_LABELS: Record<string, string> = {
 // with the reasons they were refused.
 export function HistoryPage() {
   const { data: entries, loading, error, reload } = useApi(api.history)
+  const [onlyRefused, setOnlyRefused] = useState(false)
 
   if (loading && !entries) return <p className="muted">Loading history…</p>
   if (error) return <p className="error">{error}</p>
+
+  const shown = onlyRefused ? entries?.filter((entry) => entry.outcome === 'REFUSED') : entries
 
   return (
     <section>
@@ -29,9 +33,13 @@ export function HistoryPage() {
         </button>
       </div>
       <p className="muted">Every action, including refused ones, newest first.</p>
+      <label className="filter">
+        <input type="checkbox" checked={onlyRefused} onChange={(e) => setOnlyRefused(e.target.checked)} />
+        Only refused actions
+      </label>
 
-      {entries?.length === 0 ? (
-        <p className="empty">Nothing has happened yet.</p>
+      {shown?.length === 0 ? (
+        <p className="empty">{onlyRefused ? 'No refused actions yet.' : 'Nothing has happened yet.'}</p>
       ) : (
         <table className="table">
           <thead>
@@ -44,7 +52,7 @@ export function HistoryPage() {
             </tr>
           </thead>
           <tbody>
-            {entries?.map((entry) => (
+            {shown?.map((entry) => (
               <tr key={entry.id}>
                 <td className="muted">{formatTimestamp(entry.createdAt)}</td>
                 <td>
