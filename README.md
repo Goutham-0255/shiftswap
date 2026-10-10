@@ -15,6 +15,13 @@ refusal explains why, and every action is recorded in a history log.
   own time zone or daylight saving can never change a rule's result.
 - **Seed only when empty:** `seed.json` is loaded in a single transaction only when the database
   has no data, so restarts never overwrite saved state.
+- **State machine for listings:** every allowed status change (`OPEN → CLAIMED`, `CLAIMED → APPROVED`, ...)
+  lives in one table; any other move is refused in one place.
+- **Optimistic concurrency:** claims and approvals update a listing only if it is still in the status
+  that was read (`WHERE status = 'OPEN'`), so two people clicking at the same moment cannot both win.
+- **Atomic approval:** reassigning the shift and approving the listing run in one database transaction.
+- **Append-only audit trail:** every action is recorded with its outcome, including refusals and their
+  reasons.
 
 ## Tech stack
 
