@@ -39,5 +39,10 @@ export function useAction(reload: () => void) {
     }
   }
 
-  return { run, busy, notice, error }
+  function clear() {
+    setNotice(null)
+    setError(null)
+  }
+
+  return { run, busy, notice, error, clear }
 }

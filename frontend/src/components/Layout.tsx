@@ -1,6 +1,7 @@
-import { NavLink, Outlet } from 'react-router'
+import { Link, NavLink, Outlet } from 'react-router'
 import { useActor } from '../actor/ActorContext'
 import { ActorPicker } from './ActorPicker'
+import { WelcomeScreen } from './WelcomeScreen'
 
 // Header + navigation around every page. Staff and managers see different
 // links, because they do different jobs.
@@ -10,21 +11,28 @@ export function Layout() {
   return (
     <div className="app">
       <header className="header">
-        <span className="brand">ShiftSwap</span>
-        {actor && (
-          <nav className="nav">
-            {actor.role === 'STAFF' ? (
-              <>
-                <NavLink to="/shifts">My shifts</NavLink>
-                <NavLink to="/listings">Open listings</NavLink>
-              </>
-            ) : (
-              <NavLink to="/approvals">Approvals</NavLink>
-            )}
-            <NavLink to="/history">History</NavLink>
-          </nav>
-        )}
-        <ActorPicker />
+        <div className="header-inner">
+          <Link to="/" className="brand">
+            <span className="logo" aria-hidden="true">
+              ⇄
+            </span>
+            ShiftSwap
+          </Link>
+          {actor && (
+            <nav className="nav">
+              {actor.role === 'STAFF' ? (
+                <>
+                  <NavLink to="/shifts">My shifts</NavLink>
+                  <NavLink to="/listings">Open listings</NavLink>
+                </>
+              ) : (
+                <NavLink to="/approvals">Approvals</NavLink>
+              )}
+              <NavLink to="/history">History</NavLink>
+            </nav>
+          )}
+          <ActorPicker />
+        </div>
       </header>
 
       {/* key: switching person remounts the page, so it reloads its data */}
@@ -36,10 +44,7 @@ export function Layout() {
         ) : actor ? (
           <Outlet />
         ) : (
-          <div className="empty">
-            <h2>Who are you?</h2>
-            <p>Choose a person in "Acting as" at the top right to start.</p>
-          </div>
+          <WelcomeScreen />
         )}
       </main>
     </div>

@@ -28,6 +28,15 @@ export function formatShiftTime(shift: Pick<Shift, 'start' | 'end'>) {
   return `${startDay}, ${timeOf(shift.start)} – ${endDay}, ${timeOf(shift.end)}`
 }
 
+// Split for two-line display: { day: 'Mon 2 Mar', time: '23:00 – 07:00 (next day)' }
+export function shiftParts(shift: Pick<Shift, 'start' | 'end'>) {
+  const sameDay = formatDay(shift.start) === formatDay(shift.end)
+  const time = sameDay
+    ? `${timeOf(shift.start)}–${timeOf(shift.end)}`
+    : `${timeOf(shift.start)} – ${timeOf(shift.end)} (next day)`
+  return { day: formatDay(shift.start), time }
+}
+
 export function shiftHours(shift: Pick<Shift, 'start' | 'end'>) {
   return (toUtcMs(shift.end) - toUtcMs(shift.start)) / 3_600_000
 }

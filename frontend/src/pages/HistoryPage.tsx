@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { api } from '../api/client'
+import { PageHeader } from '../components/PageHeader'
 import { ReasonList } from '../components/ReasonList'
 import { useApi } from '../hooks/useApi'
 import { formatTimestamp } from '../lib/format'
@@ -22,17 +23,21 @@ export function HistoryPage() {
   if (loading && !entries) return <p className="muted">Loading history…</p>
   if (error) return <p className="error">{error}</p>
 
+  const refusedCount = entries?.filter((entry) => entry.outcome === 'REFUSED').length ?? 0
   const shown = onlyRefused ? entries?.filter((entry) => entry.outcome === 'REFUSED') : entries
 
   return (
     <section>
-      <div className="page-title">
-        <h1>History</h1>
-        <button className="button secondary" onClick={reload} disabled={loading}>
-          Refresh
-        </button>
-      </div>
-      <p className="muted">Every action, including refused ones, newest first.</p>
+      <PageHeader
+        title="History"
+        count={`${entries?.length ?? 0} actions · ${refusedCount} refused`}
+        subtitle="Every action, including refused ones, newest first."
+        actions={
+          <button className="button secondary" onClick={reload} disabled={loading}>
+            Refresh
+          </button>
+        }
+      />
       <label className="filter">
         <input type="checkbox" checked={onlyRefused} onChange={(e) => setOnlyRefused(e.target.checked)} />
         Only refused actions
@@ -41,6 +46,7 @@ export function HistoryPage() {
       {shown?.length === 0 ? (
         <p className="empty">{onlyRefused ? 'No refused actions yet.' : 'Nothing has happened yet.'}</p>
       ) : (
+        <div className="card">
         <table className="table">
           <thead>
             <tr>
@@ -75,6 +81,7 @@ export function HistoryPage() {
             ))}
           </tbody>
         </table>
+        </div>
       )}
     </section>
   )

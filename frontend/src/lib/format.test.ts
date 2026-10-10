@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { formatShiftTime, shiftHours } from './format'
+import { formatShiftTime, shiftHours, shiftParts } from './format'
 
 describe('formatShiftTime', () => {
   it('shows a day shift on one line', () => {
@@ -32,5 +32,14 @@ describe('shiftHours', () => {
 
   it('counts half hours', () => {
     expect(shiftHours({ start: '2026-03-02T07:00', end: '2026-03-02T19:30' })).toBe(12.5)
+  })
+})
+
+describe('shiftParts', () => {
+  it('marks a night shift as ending the next day', () => {
+    expect(shiftParts({ start: '2026-03-08T23:00', end: '2026-03-09T07:00' })).toEqual({
+      day: 'Sun 8 Mar',
+      time: '23:00 – 07:00 (next day)',
+    })
   })
 })
