@@ -19,6 +19,8 @@ time with "Acting as" at the top right).
 
 ## Engineering highlights
 
+- **Route-level code splitting:** each page is loaded with `React.lazy` + `Suspense` only when its
+  route is first visited, so the first download is smaller.
 - **Rules engine (strategy pattern):** each labour rule is its own module with the same
   `check(context) → violations[]` shape; the engine runs all of them and reports every violation
   with the conflicting shift. Adding a rule means adding one file.
