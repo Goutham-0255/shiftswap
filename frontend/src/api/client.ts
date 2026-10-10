@@ -72,6 +72,8 @@ async function request<T>(path: string, method = 'GET', body?: unknown): Promise
 
 export const api = {
   staff: () => request<Staff[]>('/api/staff'),
+  addStaff: (name: string, certifications: string[]) =>
+    request<Staff>('/api/staff', 'POST', { name, certifications }),
   myShifts: () => request<MyShift[]>('/api/shifts/mine'),
   openListings: () => request<OpenListing[]>('/api/listings?status=OPEN'),
   claimedListings: () => request<Listing[]>('/api/listings?status=CLAIMED'),

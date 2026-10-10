@@ -30,10 +30,12 @@ export function useAction(reload: () => void) {
       await request()
       setNotice(successMessage)
       reload()
+      return true
     } catch (err) {
       setError(toActionError(err))
       // 409 means our data is stale (someone else acted first): refresh it.
       if (err instanceof ApiError && err.status === 409) reload()
+      return false
     } finally {
       setBusy(false)
     }

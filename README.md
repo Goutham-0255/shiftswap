@@ -98,6 +98,7 @@ Every request except `GET /api/staff` and `GET /api/history` sends the chosen pe
 | Method | Path | Who | What |
 | ------ | ---- | --- | ---- |
 | GET | `/api/staff` | anyone | People for the "acting as" picker |
+| POST | `/api/staff` `{ name, certifications }` | manager | Add a staff member (id generated, e.g. `S9`) |
 | GET | `/api/shifts/mine` | staff | My shifts, each with its open/claimed listing |
 | GET | `/api/listings?status=OPEN` | staff | Other people's open listings with `canClaim` and every reason |
 | GET | `/api/listings?status=CLAIMED` | manager | Claims waiting for approval |
