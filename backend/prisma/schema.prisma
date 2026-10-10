@@ -1,0 +1,12 @@
+// Prisma schema: the single source of truth for the database structure.
+// After editing a model run `npm run db:migrate -- --name <change>`.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// SQLite: a single local file, so the app runs with no accounts or API keys.
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
