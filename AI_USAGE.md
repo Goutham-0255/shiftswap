@@ -12,3 +12,4 @@ change before committing it.
 | Data model | Drafted the Prisma schema and seed loader | Accepted; kept times as text to match the seed format |
 | Claim rules | Drafted the five rule modules and unit tests | Reviewed each boundary case against the spec |
 | Listing workflow | Drafted the state machine, repository and service (post, withdraw, claim, unclaim, approve, reject) | Reviewed the order of checks: "no longer available" is checked before the labour rules, as the spec requires |
+| API and tests | Drafted routes, controller and API tests | Rejected `prisma migrate reset` in the test setup; tests now build a fresh `test.db` with `migrate deploy` so they never touch dev data |

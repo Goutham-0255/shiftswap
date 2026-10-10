@@ -19,6 +19,8 @@ refusal explains why, and every action is recorded in a history log.
   lives in one table; any other move is refused in one place.
 - **Optimistic concurrency:** claims and approvals update a listing only if it is still in the status
   that was read (`WHERE status = 'OPEN'`), so two people clicking at the same moment cannot both win.
+- **Workflow tests:** API tests cover the full post → claim → approve flow, every refusal type, the
+  approval re-check and two simultaneous claims (exactly one wins), against a separate test database.
 - **Atomic approval:** reassigning the shift and approving the listing run in one database transaction.
 - **Append-only audit trail:** every action is recorded with its outcome, including refusals and their
   reasons.
@@ -51,7 +53,33 @@ npm install
 npm run dev
 ```
 
+## API
+
+Every request except `GET /api/staff` and `GET /api/history` sends the chosen person in an
+`X-Actor-Id` header (there is no login).
+
+| Method | Path | Who | What |
+| ------ | ---- | --- | ---- |
+| GET | `/api/staff` | anyone | People for the "acting as" picker |
+| GET | `/api/shifts/mine` | staff | My shifts, each with its open/claimed listing |
+| GET | `/api/listings?status=OPEN` | staff | Other people's open listings with `canClaim` and every reason |
+| GET | `/api/listings?status=CLAIMED` | manager | Claims waiting for approval |
+| POST | `/api/listings` `{ shiftId }` | shift owner | Post a shift |
+| POST | `/api/listings/:id/withdraw` | poster | OPEN → WITHDRAWN |
+| POST | `/api/listings/:id/claim` | other staff | OPEN → CLAIMED if rules pass |
+| POST | `/api/listings/:id/unclaim` | claimer | CLAIMED → OPEN |
+| POST | `/api/listings/:id/approve` | manager | CLAIMED → APPROVED, shift reassigned (rules re-checked) |
+| POST | `/api/listings/:id/reject` | manager | CLAIMED → OPEN |
+| GET | `/api/history` | anyone | Every action: who, what, which shift, outcome, reasons |
+
+Errors always look like `{ "error": { "message": "...", "details": [...] } }`:
+`400` invalid input · `401` no/unknown person · `403` wrong role or not yours ·
+`409` "no longer available" or wrong state · `422` labour rules broken (details lists every rule with
+the conflicting shift).
+
 ## Assumptions
 
 - All shift times are local clinic time; the real current date never affects any rule.
 - Hours for rule 5 are each shift's full length, counted in the week the shift starts.
+- A staff member does not see their own listings in the open listings view (they see them under "My shifts").
+- Refused actions on a listing id that does not exist return 404 and are not logged, since there is no shift to record.
