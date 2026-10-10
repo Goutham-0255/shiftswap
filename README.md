@@ -24,12 +24,16 @@ refusal explains why, and every action is recorded in a history log.
 - **Atomic approval:** reassigning the shift and approving the listing run in one database transaction.
 - **Append-only audit trail:** every action is recorded with its outcome, including refusals and their
   reasons.
+- **Server decides, UI displays:** the frontend never re-implements the labour rules; it shows the
+  `canClaim` flag and reasons the backend computed, so there is one source of truth.
+- **Single API client:** one `api` module adds the `X-Actor-Id` header and turns every error response
+  into a readable message, and one `useApi` hook gives each page loading, error and reload.
 
 ## Tech stack
 
 | Layer    | Choice                                  |
 | -------- | --------------------------------------- |
-| Frontend | React, Vite, TypeScript                 |
+| Frontend | React 19, React Router, Vite, TypeScript |
 | Backend  | Node.js, Express 5, TypeScript, Zod     |
 | Database | SQLite via Prisma (local file, no setup) |
 | Tests    | Vitest, Supertest                       |
@@ -49,6 +53,7 @@ npm test
 
 # Frontend (http://localhost:5173), in a second terminal
 cd frontend
+cp .env.example .env # VITE_API_URL points at the backend
 npm install
 npm run dev
 ```
