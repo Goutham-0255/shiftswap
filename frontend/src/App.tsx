@@ -2,6 +2,9 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router'
 import { useActor } from './actor/ActorContext'
 import { ActorProvider } from './actor/ActorProvider'
 import { Layout } from './components/Layout'
+import { RequireRole } from './components/RequireRole'
+import { ApprovalsPage } from './pages/ApprovalsPage'
+import { HistoryPage } from './pages/HistoryPage'
 import { MyShiftsPage } from './pages/MyShiftsPage'
 import { OpenListingsPage } from './pages/OpenListingsPage'
 
@@ -18,10 +21,31 @@ function App() {
         <Routes>
           <Route element={<Layout />}>
             <Route index element={<Home />} />
-            <Route path="shifts" element={<MyShiftsPage />} />
-            <Route path="listings" element={<OpenListingsPage />} />
-            <Route path="approvals" element={<p className="muted">Approvals: next step</p>} />
-            <Route path="history" element={<p className="muted">History: next step</p>} />
+            <Route
+              path="shifts"
+              element={
+                <RequireRole role="STAFF">
+                  <MyShiftsPage />
+                </RequireRole>
+              }
+            />
+            <Route
+              path="listings"
+              element={
+                <RequireRole role="STAFF">
+                  <OpenListingsPage />
+                </RequireRole>
+              }
+            />
+            <Route
+              path="approvals"
+              element={
+                <RequireRole role="MANAGER">
+                  <ApprovalsPage />
+                </RequireRole>
+              }
+            />
+            <Route path="history" element={<HistoryPage />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Route>
         </Routes>

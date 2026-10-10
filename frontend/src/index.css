@@ -248,3 +248,19 @@ h2 {
     overflow-x: auto;
   }
 }
+
+.badge-refused {
+  background: var(--danger-bg);
+  color: var(--danger);
+}
+
+.page-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.page-title h1 {
+  margin: 0;
+}
